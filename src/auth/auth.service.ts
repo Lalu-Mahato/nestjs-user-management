@@ -7,7 +7,7 @@ import {
 import { RegisterUserDto } from './dto/register-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import {
   DUPLICATE_CODE,
   EMAIL_ALREADY_TAKEN,
@@ -31,8 +31,10 @@ export class AuthService {
   async register(registerUserDto: RegisterUserDto): Promise<ApiResponse<User>> {
     try {
       const { password } = registerUserDto;
+      const id = this.commonService.generateUniqueIntegerId();
       const hashedPassword = await AuthUtils.encryptPassword(password);
       const data = this.authRepository.create({
+        id,
         ...registerUserDto,
         password: hashedPassword,
       });
@@ -49,7 +51,9 @@ export class AuthService {
 
   async login(loginUserDto: LoginUserDto): Promise<ApiResponse<LoginResponse>> {
     const { email, password } = loginUserDto;
-    const user = await this.authRepository.findOneBy({ email });
+    const user = await this.authRepository.findOne({
+      where: { email: ILike(email) },
+    });
     if (!user) {
       throw new UnauthorizedException(INVALID_LOGIN_CREDENTIAL);
     }
