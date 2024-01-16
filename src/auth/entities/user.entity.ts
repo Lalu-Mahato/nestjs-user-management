@@ -1,5 +1,5 @@
 import { Base } from 'src/common/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends Base {
@@ -17,4 +17,10 @@ export class User extends Base {
 
   @Column({ default: true })
   status: boolean;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  lowercaseEmail() {
+    this.email = this.email.toLowerCase();
+  }
 }
