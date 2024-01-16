@@ -23,8 +23,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user: User = await this.usersRepository
       .createQueryBuilder('user')
       .select(['user.id', 'user.email'])
-      .where('user.email = :email', { email })
+      .where('LOWER(user.email) = LOWER(:email)', {
+        email: email.toLowerCase(),
+      })
       .getOne();
+
+    console.log(user);
     if (!user) {
       throw new UnauthorizedException();
     }
