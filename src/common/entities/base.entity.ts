@@ -4,8 +4,8 @@ export class Base {
   id: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updated: Date;
+  updatedAt: Date;
 }
