@@ -5,4 +5,8 @@ export class AuthUtils {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
   }
+
+  static decryptPassword(plainPwd: string, hashedPwd: string): Promise<string> {
+    return bcrypt.compare(plainPwd, hashedPwd);
+  }
 }

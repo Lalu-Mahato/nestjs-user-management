@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { User } from './entities/user.entity';
 import { ApiResponse } from 'src/common/types/common.types';
+import { LoginUserDto } from './dto/login-user.dto';
+import { LoginResponse } from './types/common.types';
 
 @Controller('auth')
 export class AuthController {
@@ -13,5 +15,12 @@ export class AuthController {
     @Body() registerUserDto: RegisterUserDto,
   ): Promise<ApiResponse<User>> {
     return this.authService.register(registerUserDto);
+  }
+
+  @Post('/login')
+  login(
+    @Body() loginUserDto: LoginUserDto,
+  ): Promise<ApiResponse<LoginResponse>> {
+    return this.authService.login(loginUserDto);
   }
 }
